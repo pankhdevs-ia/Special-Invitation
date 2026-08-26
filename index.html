@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Convite Especial 🐺</title>
+
+  <!-- Fonte bonita do Google -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
+
+  <style>
+    /* 1. CONFIGURAÇÕES GERAIS DA TELA */
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    body {
+      background: #000;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* 2. O CELULAR */
+    .celular {
+      width: 100%;
+      max-width: 400px;
+      height: 100vh;
+      max-height: 800px;
+      /* Imagem de fundo ajustada para o arquivo direto */
+      background: linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.5)), 
+                  url('https://i.pinimg.com/736x/8e/bc/0a/8ebc0a6b7d341bf823861219eeeaef94.jpg') center/cover no-repeat;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 40px 20px;
+      position: relative;
+    }
+
+    /* 3. RELÓGIO */
+    .relogio-box {
+      text-align: center;
+      color: white;
+      margin-top: 20px;
+    }
+
+    .horas {
+      font-size: 4.5rem;
+      font-weight: 800;
+    }
+
+    .data {
+      font-size: 1rem;
+      opacity: 0.9;
+    }
+
+    /* 4. O CARD DA NOTIFICAÇÃO (Estilo WhatsApp) */
+    .notificacao {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      backdrop-filter: blur(10px); /* Efeito vidro */
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.3);
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    .notificacao:active {
+      transform: scale(0.96); /* Efeito de apertar o botão */
+    }
+
+    .notificacao-topo {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .app-tag {
+      color: #25D366;
+      font-weight: bold;
+    }
+
+    .notificacao-corpo {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .foto-perfil {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      object-fit: cover;
+    }
+
+    .texto h4 {
+      font-size: 0.95rem;
+      color: #111;
+    }
+
+    .texto p {
+      font-size: 0.85rem;
+      color: #444;
+    }
+
+    .dica-toque {
+      font-size: 0.75rem;
+      color: #2563eb;
+      font-weight: bold;
+      text-align: right;
+      margin-top: 8px;
+    }
+
+    /* 5. TELA DO CONVITE (Escondida no início) */
+    .convite-revelado {
+      display: none; /* Inicia oculto */
+      background: white;
+      padding: 30px 20px;
+      border-radius: 25px;
+      text-align: center;
+      width: 100%;
+      box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+    }
+
+    .foto-grande {
+      width: 110px;
+      height: 110px;
+      margin-bottom: 15px;
+    }
+
+    .convite-revelado h2 {
+      font-size: 1.5rem;
+      color: #111;
+      margin-bottom: 10px;
+    }
+
+    .convite-revelado p {
+      color: #555;
+      font-size: 0.95rem;
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+
+    .botao-aceitar {
+      background: #25D366;
+      color: white;
+      font-weight: bold;
+      font-size: 1rem;
+      padding: 14px;
+      border: none;
+      border-radius: 30px;
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    .botao-aceitar:active {
+      transform: scale(0.96);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ESTRUTURA DO CELULAR -->
+  <div class="celular">
+
+    <!-- RELÓGIO -->
+    <div class="relogio-box" id="caixaRelogio">
+      <div class="horas" id="textoHoras">20:45</div>
+      <div class="data" id="textoData">Quarta-feira, 26 de Agosto</div>
+    </div>
+
+    <!-- CARD DE NOTIFICAÇÃO (O que aparece primeiro) -->
+    <div class="notificacao" id="cardNotificacao" onclick="mostrarConvite()">
+      <div class="notificacao-topo">
+        <span class="app-tag">💬 WhatsApp</span>
+        <span>Agora</span>
+      </div>
+      <div class="notificacao-corpo">
+        <img class="foto-perfil" src="img/DUVIDA.png" alt="Lobo em Dúvida" onerror="this.src='https://via.placeholder.com/50'">
+        <div class="texto">
+          <h4>P_Esdras</h4>
+          <p>Você tem 1 mensagem pendente. Toque para ver...</p>
+        </div>
+      </div>
+      <div class="dica-toque">Toque para abrir ➔</div>
+    </div>
+
+    <!-- CARTA DE CONVITE (O que aparece depois de clicar) -->
+    <div class="convite-revelado" id="cardConvite">
+      <img class="foto-grande" src="img/SURPRESA.png" alt="Lobo Surpreso" onerror="this.src='https://via.placeholder.com/100'">
+      <h2>Convite do Culto! 🚀✨</h2>
+      <p>Falei que teria algo personalizado! Alicia, só para você saber: da minha parte, o convite vai estar sempre de pé com todo o carinho. Sua pessoa faz diferença pra mim, pro pessoal... e vamos estar te esperando até a próxima oportunidade que tiver; Afinal, você é Plenitudiana, né?</p>
+      <button class="botao-aceitar" onclick="abrirWhatsApp()">Bora lá!!! 🎉</button>
+    </div>
+
+    <div></div> <!-- Espaçador para centralizar tudo -->
+  </div>
+
+  <!-- AÇÕES (JAVASCRIPT) -->
+  <script>
+    // 1. Atualiza as horas e data do celular automaticamente
+    function atualizarTempo() {
+      const agora = new Date();
+      
+      const h = String(agora.getHours()).padStart(2, '0');
+      const m = String(agora.getMinutes()).padStart(2, '0');
+      document.getElementById('textoHoras').innerText = `${h}:${m}`;
+
+      const opcoes = { weekday: 'long', day: 'numeric', month: 'long' };
+      let dataTexto = agora.toLocaleDateString('pt-BR', opcoes);
+      dataTexto = dataTexto.charAt(0).toUpperCase() + dataTexto.slice(1);
+      document.getElementById('textoData').innerText = dataTexto;
+    }
+    
+    atualizarTempo();
+    setInterval(atualizarTempo, 1000);
+
+    // 2. Toca um som fofo sem precisar de arquivo externo
+    function tocarSom() {
+      try {
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(587.33, audioCtx.currentTime);
+        osc.frequency.exponentialRampToValueAtTime(880, audioCtx.currentTime + 0.15);
+
+        gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+        gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + 0.25);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start();
+        osc.stop(audioCtx.currentTime + 0.25);
+      } catch (e) {
+        // Ignora erros caso o áudio seja bloqueado pelo navegador
+      }
+    }
+
+    // 3. Esconde a notificação e exibe o convite
+    function mostrarConvite() {
+      tocarSom();
+
+      document.getElementById('caixaRelogio').style.display = 'none';
+      document.getElementById('cardNotificacao').style.display = 'none';
+
+      document.getElementById('cardConvite').style.display = 'block';
+    }
+
+    // 4. Redireciona para o WhatsApp com mensagem pronta
+    function abrirWhatsApp() {
+      const numero = "55639981140434"; 
+      const texto = encodeURIComponent("Opa! Vi a notificação aqui e aceitei o convite! Bora pra Plenitude! 🙌🎉");
+      window.location.href = `https://wa.me/${numero}?text=${texto}`;
+    }
+  </script>
+
+</body>
+</html>
