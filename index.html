@@ -3,12 +3,12 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Um Convite Especial</title>
+  <title>Notificação</title>
 
-  <!-- Google Fonts (Plus Jakarta Sans) -->
+  <!-- Google Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
   <style>
     * {
@@ -16,186 +16,264 @@
       margin: 0;
       padding: 0;
       font-family: 'Plus Jakarta Sans', sans-serif;
-      -webkit-font-smoothing: antialiased;
       -webkit-tap-highlight-color: transparent;
+      user-select: none;
     }
 
     body {
-      background: linear-gradient(135deg, #242f92 0%, #0f0c20 100%);
+      background: #000;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
       overflow: hidden;
-      touch-action: manipulation;
     }
 
-    .card {
-      background: #ffffff;
-      padding: 40px 30px;
-      border-radius: 24px;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
-      text-align: center;
-      max-width: 420px;
+    /* TELA DE BLOQUEIO / CONTAINER */
+    .phone-screen {
       width: 100%;
+      max-width: 414px;
+      height: 100vh;
+      background: linear-gradient(180deg, rgba(15, 12, 32, 0.7) 0%, rgba(36, 47, 146, 0.8) 100%), 
+                  url('https://images.unsplash.com/photo-1518837695005-2083093ee35b?auto=format&fit=crop&w=800&q=80') center/cover;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: space-between;
+      padding: 60px 20px 40px 20px;
       position: relative;
     }
 
-    .lobo-icon {
-      width: 150px;
-      height: 150px;
-      margin: 0 auto 20px auto;
+    /* RELÓGIO DA TELA DE BLOQUEIO */
+    .clock-container {
+      text-align: center;
+      color: #ffffff;
+    }
+
+    .clock {
+      font-size: 4.5rem;
+      font-weight: 700;
+      letter-spacing: -2px;
+      line-height: 1;
+      text-shadow: 0 4px 15px rgba(0,0,0,0.5);
+    }
+
+    .date {
+      font-size: 1.05rem;
+      font-weight: 500;
+      margin-top: 8px;
+      opacity: 0.9;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.5);
+    }
+
+    /* CARD DE NOTIFICAÇÃO DO WHATSAPP */
+    .notification-card {
+      width: 100%;
+      background: rgba(255, 255, 255, 0.85);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+      cursor: pointer;
+      transform: translateY(-20px);
+      opacity: 0;
+      animation: slideDown 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275) 0.5s forwards;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+
+    .notif-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .notif-app {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .ws-icon {
+      width: 20px;
+      height: 20px;
+      background: #25D366;
+      border-radius: 6px;
       display: flex;
       align-items: center;
       justify-content: center;
+      color: white;
+      font-size: 11px;
+      font-weight: bold;
+    }
+
+    .app-name {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: #4b5563;
+      letter-spacing: 0.5px;
+      text-transform: uppercase;
+    }
+
+    .time-ago {
+      font-size: 0.75rem;
+      color: #6b7280;
+    }
+
+    .notif-body h4 {
+      font-size: 0.95rem;
+      color: #111827;
+      font-weight: 700;
+      margin-bottom: 2px;
+    }
+
+    .notif-body p {
+      font-size: 0.9rem;
+      color: #374151;
+      line-height: 1.35;
+    }
+
+    .tap-hint {
+      margin-top: 10px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: #2563eb;
+      text-align: right;
+    }
+
+    /* TELA SECRETA DE CONVITE (ABRE APÓS CLICAR) */
+    .card-revelado {
+      display: none;
+      background: #ffffff;
+      padding: 35px 25px;
+      border-radius: 28px;
+      text-align: center;
+      width: 100%;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+      animation: zoomIn 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+    }
+
+    .lobo-icon {
+      width: 130px;
+      height: 130px;
+      margin: 0 auto 15px auto;
     }
 
     .lobo-icon img {
       width: 100%;
       height: 100%;
       object-fit: contain;
-      filter: drop-shadow(0 8px 16px rgba(0, 0, 0, 0.15));
     }
 
-    h1 {
+    .card-revelado h2 {
       color: #111827;
-      font-size: 1.85rem;
-      font-weight: 800;
-      letter-spacing: -0.025em;
-      margin-bottom: 22px;
-      line-height: 1.25;
-    }
-
-    p {
-      color: #4b5563;
-      font-size: 1.05rem;
-      font-weight: 400;
-      line-height: 1.6;
-      margin-bottom: 32px;
-    }
-
-    .btn-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      gap: 15px;
-      position: relative;
-      min-height: 60px;
-    }
-
-    button {
-      padding: 14px 28px;
-      font-size: 1rem;
-      font-weight: 700;
-      border: none;
-      border-radius: 12px;
-      cursor: pointer;
-      transition: transform 0.15s ease, background-color 0.2s ease;
-      user-select: none;
-    }
-
-    .btn-sim {
-      background-color: #1059b9;
-      color: white;
-      box-shadow: 0 4px 20px rgba(16, 14, 145, 0.35);
-      z-index: 2;
-    }
-
-    .btn-nao {
-      background-color: #ff3d3d;
-      color: #ffffff;
-      box-shadow: 0 4px 20px rgba(184, 57, 57, 0.35);
-      z-index: 9999;
-      position: relative;
-    }
-
-    .sucesso {
-      display: none;
-      animation: fadeIn 0.4s ease-out forwards;
-    }
-
-    .sucesso h2 {
-      color: #10b981;
-      font-size: 1.9rem;
+      font-size: 1.6rem;
       font-weight: 800;
       margin-bottom: 12px;
     }
 
-    @keyframes fadeIn {
-      from { opacity: 0; transform: scale(0.95); }
-      to { opacity: 1; transform: scale(1); }
+    .card-revelado p {
+      color: #4b5563;
+      font-size: 0.98rem;
+      line-height: 1.5;
+      margin-bottom: 25px;
+    }
+
+    .btn-resposta {
+      background-color: #25D366;
+      color: white;
+      font-weight: 800;
+      font-size: 1rem;
+      padding: 14px 24px;
+      border: none;
+      border-radius: 50px;
+      width: 100%;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(37, 211, 102, 0.4);
+    }
+
+    /* ANIMAÇÕES */
+    @keyframes slideDown {
+      to {
+        transform: translateY(0);
+        opacity: 1;
+      }
+    }
+
+    @keyframes zoomIn {
+      from { transform: scale(0.8); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
     }
   </style>
 </head>
 <body>
 
-  <!-- TELA 1 -->
-  <div class="card" id="card-convite">
-    <div class="lobo-icon">
-      <img src="img/DUVIDA.png" alt="Lobo em dúvida">
+  <div class="phone-screen" id="lockScreen">
+    
+    <!-- Relógio superior -->
+    <div class="clock-container" id="clockContainer">
+      <div class="clock" id="time">20:45</div>
+      <div class="date" id="date">Quarta-feira, 26 de Agosto</div>
     </div>
 
-    <h1>Falei que teria um convite personalizado...</h1>
-    <p>Sei que você deve ter várias coisas pra fazer, e vontade pra ir na Plenitude, então, bora num culto de quarta-feira? Ou Sexta? Ou Sábado? Ou Domingo kakakak</p>
-
-    <div class="btn-container">
-      <button class="btn-sim" id="btnSim" onclick="aceitou()">Com certeza! 🚀</button>
-      <button class="btn-nao" id="btnNao">Não posso 😢</button>
+    <!-- Notificação Falsa -->
+    <div class="notification-card" id="notifCard" onclick="abrirConvite()">
+      <div class="notif-header">
+        <div class="notif-app">
+          <div class="ws-icon">💬</div>
+          <span class="app-name">WhatsApp</span>
+        </div>
+        <span class="time-ago">Agora</span>
+      </div>
+      <div class="notif-body">
+        <h4>Mensagem Prioritária 🔒</h4>
+        <p>Você tem 1 novo convite especial pendente. Toque para abrir...</p>
+      </div>
+      <div class="tap-hint">Toque para responder ➔</div>
     </div>
-  </div>
 
-  <!-- TELA 2 -->
-  <div class="card sucesso" id="card-sucesso">
-    <div class="lobo-icon">
-      <img src="img/SURPRESA.png" alt="Lobo surpreso">
+    <!-- Convite Revelado (Lobo Surpreso) -->
+    <div class="card-revelado" id="cardRevelado">
+      <div class="lobo-icon">
+        <img src="img/SURPRESA.png" alt="Lobo Surpreso">
+      </div>
+      <h2>Convite do Culto! 🚀✨</h2>
+      <p>Falei que teria algo personalizado! Sei que você é Plenitudiana, então bora ir no culto comigo nessa semana?</p>
+      <button class="btn-resposta" onclick="irWhats()">Com certeza, bora! 🎉</button>
     </div>
 
-    <h2>Aeee! Que magnífico! 🎉</h2>
-    <p>Sei que deve ter sido difícil recusar, viu? 😂 Mas já fica sabendo que, da minha parte, o convite está sempre de pé. Afinal, você é Plenitudiana, né?</p>
+    <div style="height: 10px;"></div>
   </div>
 
   <script>
-    const btnNao = document.getElementById('btnNao');
-    const btnSim = document.getElementById('btnSim');
-    let escalaSim = 1;
+    // Atualiza hora e data dinamicamente
+    function atualizarRelogio() {
+      const agora = new Date();
+      const horas = String(agora.getHours()).padStart(2, '0');
+      const minutos = String(agora.getMinutes()).padStart(2, '0');
+      document.getElementById('time').innerText = `${horas}:${minutos}`;
 
-    function moverBotao() {
-      const padding = 30;
-      const larguraTela = window.innerWidth - btnNao.offsetWidth - padding;
-      const alturaTela = window.innerHeight - btnNao.offsetHeight - padding;
+      const opcoesData = { weekday: 'long', day: 'numeric', month: 'long' };
+      let dataFormatada = agora.toLocaleDateString('pt-BR', opcoesData);
+      dataFormatada = dataFormatada.charAt(0).toUpperCase() + dataFormatada.slice(1);
+      document.getElementById('date').innerText = dataFormatada;
+    }
+    atualizarRelogio();
 
-      const x = Math.max(padding, Math.floor(Math.random() * larguraTela));
-      const y = Math.max(padding, Math.floor(Math.random() * alturaTela));
-
-      btnNao.style.position = 'fixed';
-      btnNao.style.left = `${x}px`;
-      btnNao.style.top = `${y}px`;
-
-      // Faz o botão "SIM" crescer no toque
-      escalaSim += 0.15;
-      btnSim.style.transform = `scale(${escalaSim})`;
+    function abrirConvite() {
+      // Esconde o relógio e a notificação
+      document.getElementById('clockContainer').style.display = 'none';
+      document.getElementById('notifCard').style.display = 'none';
+      
+      // Exibe o card com a imagem do Lobo Surpreso
+      document.getElementById('cardRevelado').style.display = 'block';
     }
 
-    // Intercepta qualquer intenção de toque antes do clique registrar
-    ['touchstart', 'click', 'mouseover'].forEach(evt => {
-      btnNao.addEventListener(evt, (e) => {
-        e.preventDefault();
-        e.stopPropagation();
-        moverBotao();
-      }, { passive: false });
-    });
-
-    function aceitou() {
-      document.getElementById('card-convite').style.display = 'none';
-      document.getElementById('card-sucesso').style.display = 'block';
-      
+    function irWhats() {
       const meuNumero = "55639981140434"; 
-      const mensagem = encodeURIComponent("Opa! Aceitei seu convite pra ir na igreja! Quase impossível recusar...");
-      
-      setTimeout(() => {
-        window.location.href = `https://wa.me/${meuNumero}?text=${mensagem}`;
-      }, 1500);
+      const mensagem = encodeURIComponent("Opa! Vi a notificação aqui e aceitei o convite! Bora pra Plenitude! 🙌🎉");
+      window.location.href = `https://wa.me/${meuNumero}?text=${mensagem}`;
     }
   </script>
 
