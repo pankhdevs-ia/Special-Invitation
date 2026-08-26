@@ -3,9 +3,9 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Um Convite Especial </title>
+  <title>Um Convite Especial</title>
 
-  <!-- Importação do Google Fonts (Plus Jakarta Sans) -->
+  <!-- Google Fonts (Plus Jakarta Sans) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -17,6 +17,7 @@
       padding: 0;
       font-family: 'Plus Jakarta Sans', sans-serif;
       -webkit-font-smoothing: antialiased;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
@@ -26,6 +27,7 @@
       justify-content: center;
       align-items: center;
       padding: 20px;
+      overflow: hidden; /* Evita rolar a página quando o botão fugir */
     }
 
     .card {
@@ -37,6 +39,7 @@
       max-width: 420px;
       width: 100%;
       transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      position: relative;
     }
 
     .lobo-icon {
@@ -75,39 +78,40 @@
     .btn-container {
       display: flex;
       justify-content: center;
+      align-items: center;
       gap: 15px;
       position: relative;
-      min-height: 52px;
+      min-height: 60px;
     }
 
     button {
-      padding: 14px 30px;
+      padding: 14px 28px;
       font-size: 1rem;
       font-weight: 700;
       letter-spacing: -0.01em;
-      border: 4px;
-      border-radius: 9px;
+      border: none;
+      border-radius: 12px;
       cursor: pointer;
-      transition: all 0.25s ease;
+      transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+      user-select: none;
     }
 
     .btn-sim {
       background-color: #1059b9;
       color: white;
       box-shadow: 0 4px 20px rgba(16, 14, 145, 0.35);
+      z-index: 2;
     }
 
-    .btn-sim:hover {
-      background-color: #1e65c4;
-      transform: translateY(-2px) scale(1.05);
-      box-shadow: 0 8px 25px rgba(11, 131, 230, 0.45);
+    .btn-sim:active {
+      transform: scale(0.95);
     }
 
     .btn-nao {
       background-color: #ff3d3d;
       color: rgb(247, 244, 244);
-      position: absolute;
       box-shadow: 0 4px 20px rgba(184, 57, 57, 0.35);
+      z-index: 10;
     }
 
     .sucesso {
@@ -141,8 +145,8 @@
     <p>Sei que você deve ter várias coisas pra fazer, e vontade pra ir na Plenitude, então, bora num culto de quarta-feira? Ou Sexta? Ou Sábado? Ou Domingo kakakak</p>
 
     <div class="btn-container">
-      <button class="btn-sim" onclick="aceitou()">Com certeza! 🚀</button>
-      <button class="btn-nao" id="btnNao" onmouseover="fugir()" onclick="fugir()">Não posso 😢</button>
+      <button class="btn-sim" id="btnSim" onclick="aceitou()">Com certeza! 🚀</button>
+      <button class="btn-nao" id="btnNao">Não posso 😢</button>
     </div>
   </div>
 
@@ -152,34 +156,52 @@
       <img src="img/SURPRESA.png" alt="Lobo surpreso">
     </div>
 
-    <h2>Aeee! Que magnifico! 🎉</h2>
+    <h2>Aeee! Que magnífico! 🎉</h2>
     <p>Sei que deve ter sido difícil recusar, viu? 😂 Mas já fica sabendo que, da minha parte, o convite está sempre de pé. Afinal, você é Plenitudiana, né?</p>
   </div>
 
   <script>
-    function fugir() {
-      const btnNao = document.getElementById('btnNao');
-      const x = Math.random() * (window.innerWidth - btnNao.offsetWidth - 40);
-      const y = Math.random() * (window.innerHeight - btnNao.offsetHeight - 40);
+    const btnNao = document.getElementById('btnNao');
+    const btnSim = document.getElementById('btnSim');
+    let escalaSim = 1;
+
+    function fugir(e) {
+      if (e) e.preventDefault(); // Impede o clique físico de registrar
+      
+      // Limites da tela para o botão não sumir completamente
+      const padding = 20;
+      const maxX = window.innerWidth - btnNao.offsetWidth - padding;
+      const maxY = window.innerHeight - btnNao.offsetHeight - padding;
+
+      const randomX = Math.max(padding, Math.floor(Math.random() * maxX));
+      const randomY = Math.max(padding, Math.floor(Math.random() * maxY));
 
       btnNao.style.position = 'fixed';
-      btnNao.style.left = `${x}px`;
-      btnNao.style.top = `${y}px`;
+      btnNao.style.left = `${randomX}px`;
+      btnNao.style.top = `${randomY}px`;
+
+      // A cada tentativa de toque no NÃO, o SIM cresce 15%!
+      escalaSim += 0.15;
+      btnSim.style.transform = `scale(${escalaSim})`;
     }
 
+    // Eventos para Mobile (Touch) e Desktop (Mouse)
+    btnNao.addEventListener('touchstart', fugir, { passive: false });
+    btnNao.addEventListener('pointerdown', fugir);
+    btnNao.addEventListener('mouseover', fugir);
+
     function aceitou() {
-  document.getElementById('card-convite').style.display = 'none';
-  document.getElementById('card-sucesso').style.display = 'block';
-  
-  // Seu número com DDD (ex: 5563999998888)
-  const meuNumero = "55639981140434"; 
-  const mensagem = encodeURIComponent("Opa! Aceitei seu convite pra ir na igreja! Quase impossível recusar...");
-  
-  // Aguarda 1.5 segundo para ela ver o lobo surpreso e abre o WhatsApp
-  setTimeout(() => {
-    window.open(`https://wa.me/${meuNumero}?text=${mensagem}`, '_blank');
-  }, 1500);
-}
+      document.getElementById('card-convite').style.display = 'none';
+      document.getElementById('card-sucesso').style.display = 'block';
+      
+      const meuNumero = "55639981140434"; 
+      const mensagem = encodeURIComponent("Opa! Aceitei seu convite pra ir na igreja! Quase impossível recusar...");
+      
+      // No celular, window.location.href funciona sem ser bloqueado por antipopup
+      setTimeout(() => {
+        window.location.href = `https://wa.me/${meuNumero}?text=${mensagem}`;
+      }, 1500);
+    }
   </script>
 
 </body>
